@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Portfolio {{ $profile['name'] }} - {{ $profile['title'] }}">
+    <meta name="theme-color" content="#6366f1">
     <title>{{ $profile['name'] ?? config('app.name') }} | Portfolio</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

@@ -1,22 +1,27 @@
 <section id="home" class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 pt-16 overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.06),transparent_70%)]"></div>
     <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full mx-auto mb-6 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xl ring-4 ring-white/50">
-            <span class="text-3xl sm:text-4xl font-bold text-white">IQ</span>
+        <div class="animate-on-scroll w-28 h-28 sm:w-32 sm:h-32 rounded-full mx-auto mb-6 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xl ring-4 ring-white/50 overflow-hidden">
+            @if($profile['photo'] && !str_contains($profile['photo'], 'photos/profile.jpg'))
+                <img src="{{ $profile['photo'] }}" alt="{{ $profile['name'] }}" class="w-full h-full object-cover">
+            @else
+                <span class="text-3xl sm:text-4xl font-bold text-white">IH</span>
+            @endif
         </div>
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-3">{{ $profile['name'] }}</h1>
-        <p class="text-lg sm:text-xl md:text-2xl text-indigo-600 font-medium mb-4">{{ $profile['title'] }}</p>
-        <p class="text-gray-600 max-w-2xl mx-auto mb-8 text-base sm:text-lg leading-relaxed">{{ $profile['tagline'] }}</p>
-        <div class="flex justify-center gap-4 flex-wrap">
-            <a href="#projects" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 active:bg-indigo-800 transition font-medium shadow-lg shadow-indigo-200 hover:shadow-indigo-300">
+        <h1 class="animate-on-scroll text-4xl sm:text-5xl md:text-6xl font-bold mb-3 bg-gradient-to-r from-gray-900 via-indigo-800 to-purple-800 bg-clip-text text-transparent">{{ $profile['name'] }}</h1>
+        <p class="animate-on-scroll text-lg sm:text-xl md:text-2xl text-indigo-600 font-medium mb-4">{{ $profile['title'] }}</p>
+        <p class="animate-on-scroll text-gray-600 max-w-2xl mx-auto mb-8 text-base sm:text-lg leading-relaxed">{{ $profile['tagline'] }}</p>
+        <div class="animate-on-scroll flex justify-center gap-4 flex-wrap">
+            <a href="#projects" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 active:bg-indigo-800 transition-all font-medium shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:-translate-y-0.5">
                 Lihat Proyek
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
             </a>
-            <a href="#contact" class="inline-flex items-center gap-2 border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl hover:bg-indigo-50 active:bg-indigo-100 transition font-medium">
+            <a href="#contact" class="inline-flex items-center gap-2 border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl hover:bg-indigo-50 active:bg-indigo-100 transition-all font-medium hover:-translate-y-0.5">
                 Hubungi Saya
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </a>
         </div>
-        <div class="flex justify-center gap-5 mt-8">
+        <div class="animate-on-scroll flex justify-center gap-5 mt-8">
             @foreach($profile['social'] as $key => $url)
                 @if($key === 'github')
                     <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-indigo-600 transition transform hover:scale-110" aria-label="GitHub">
