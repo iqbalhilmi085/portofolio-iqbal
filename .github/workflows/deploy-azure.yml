@@ -1,0 +1,63 @@
+name: Deploy to Azure App Service
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, intl, zip, bcmath
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install npm dependencies & build
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+
+      - name: Create deployment artifact
+        run: |
+          mkdir -p deploy
+          rsync -a --exclude='.git' --exclude='.github' --exclude='node_modules' --exclude='.env' --exclude='tests' --exclude='storage/framework/cache/data/*' --exclude='storage/logs/*' ./ deploy/
+          cd deploy
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          mkdir -p storage/framework/cache/data
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          mkdir -p storage/logs
+          cd ..
+          cd deploy && zip -r ../artifact.zip . && cd ..
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: app-portofolio-iqbal
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: artifact.zip
+
+      - name: Run database migrations
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az webapp ssh --resource-group rg-portofolio-iqbal --name app-portofolio-iqbal --command "php artisan migrate --force"
